@@ -1,0 +1,31 @@
+const express = require('express');
+const router = express.Router();
+const Item = require('../models/Item');
+
+// GET all items
+router.get('/items', async (req, res) => {
+  try {
+    const items = await Item.find();
+    res.json(items);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// POST new item
+router.post('/items', async (req, res) => {
+  const newItem = new Item({
+    name: req.body.name
+  });
+
+  try {
+    const item = await newItem.save();
+    res.json(item);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+module.exports = router;
